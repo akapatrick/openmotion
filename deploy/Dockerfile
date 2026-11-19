@@ -19,6 +19,8 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev --no-audit --no-fund && npm cache clean --force
 COPY . .
+# Fork-Patch: Anfragen einer oeffentlichen Domain zulassen (Reverse-Proxy).
+RUN node deploy/allow-remote-host.mjs
 COPY --from=build /app/studio/build ./studio/build
 COPY --from=build /app/web/inline-video.html ./web/inline-video.html
 COPY --from=build /app/mcp-ui/template-recommendations/build ./mcp-ui/template-recommendations/build
